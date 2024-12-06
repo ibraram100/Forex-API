@@ -7,17 +7,31 @@ package com.ibrahimRamadan.forexAPI.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Setter
-@Getter
+import java.util.ArrayList;
+import java.util.List;
+
+
 @AllArgsConstructor
 @NoArgsConstructor
+
 @Entity
 @Table(name = "users") // setting the table name in db
-public class User {
+@Data
+public class UserEntity {
     @Id // it's like saying userId is our pk
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto incrementing pk userId
+    @Column(name = "user_id")
     private long userId;
     private String username;
     private String email;
+    private String password;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id",referencedColumnName = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "role_id",referencedColumnName = "role_id")
+    )
+    private List<Role> roles = new ArrayList<>();
+
+
 
 }
