@@ -22,8 +22,11 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Auto incrementing pk userId
     @Column(name = "user_id")
     private long userId;
+    @Column(nullable = false, unique = true) // username can't be null, and also should be unique
     private String username;
+    @Column(nullable = false, unique = true)
     private String email;
+    @Column(nullable = false)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
