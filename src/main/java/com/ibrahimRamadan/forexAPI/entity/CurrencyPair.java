@@ -4,11 +4,14 @@ package com.ibrahimRamadan.forexAPI.entity;
 // as they will be used in the variation class
 
 import com.ibrahimRamadan.forexAPI.repository.CurrencyPairRepository;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,8 +26,9 @@ public class CurrencyPair {
     @Column(name = "base_currency")
     private String baseCurrency;
     @Column(name = "quote_currency")
-    private String quote_currency;
+    private String quoteCurrency;
     private String symbol; // EUR/USD for example
-    
 
+    @OneToMany(mappedBy = "currencyPair", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Variation> variations;
 }
