@@ -43,7 +43,14 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/live-prices/**").permitAll()
                 .requestMatchers("/api/test/t1").hasAuthority("USER")
+                .requestMatchers("/api/variations/stream").permitAll()
+                .requestMatchers("/api/test/stream").permitAll()
+                .requestMatchers("/forex/**").permitAll()
+                .requestMatchers("/live-prices/**").permitAll()
+
+
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();
