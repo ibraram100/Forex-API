@@ -22,8 +22,11 @@ public class Variation {
     private long variationId;
     private double price;
     private LocalDateTime timeStamp;
-
     @ManyToOne
     @JoinColumn(name = "currency_pair_id", nullable = false)
     private CurrencyPair currencyPair;
+    @Column(name = "buy_price")
+    private double buyPrice;
+    @Column(name = "sell_price")
+    private double sellPrice;
 }

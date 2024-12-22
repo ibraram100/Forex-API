@@ -15,4 +15,6 @@ public class VariationDto {
     private long variationId;
     private double price;
     private LocalDateTime timeStamp;
+    private double buyPrice;
+    private double sellPrice;
 }

@@ -49,6 +49,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/test/stream").permitAll()
                 .requestMatchers("/forex/**").permitAll()
                 .requestMatchers("/live-prices/**").permitAll()
+                .requestMatchers("/api/buy").permitAll()
+
 
 
                 .anyRequest().authenticated()
