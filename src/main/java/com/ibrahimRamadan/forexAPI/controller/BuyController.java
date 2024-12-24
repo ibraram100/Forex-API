@@ -9,8 +9,10 @@ import com.ibrahimRamadan.forexAPI.repository.OrderRepository;
 import com.ibrahimRamadan.forexAPI.repository.UserRepository;
 import com.ibrahimRamadan.forexAPI.service.OrderService;
 import com.ibrahimRamadan.forexAPI.service.VariationService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,25 +40,34 @@ public class BuyController {
 
     // Front would just send a request and the last sav
     @PostMapping("/buy")
-    public HttpStatus marketOrder(Principal principal, @RequestParam int quantity)
+    @Transactional
+    public ResponseEntity<String> marketOrder(Principal principal, @RequestParam int quantity)
     {
         // Creating the user who made the order
         Optional<UserEntity> userEntity = userRepository.findByUsername(principal.getName());
         if (userEntity.isEmpty())
         {
-            return HttpStatus.BAD_REQUEST;
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found !");
         }
         UserEntity user = userEntity.get();
 
+
 //        VariationDto variationDto = variationService.getLastVariation();
         VariationDto variationDto = variationController.getLastVariation();
+        if (user.getCredit() < (quantity * variationDto.getBuyPrice()))
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Insufficient funds !");
+        }
+        user.setCredit(user.getCredit() - (quantity * variationDto.getBuyPrice()));
+        userRepository.save(user);
         OrderDto orderDto = new OrderDto();
         orderDto.setOrderStatus("open");
         orderDto.setPrice(variationDto.getBuyPrice());
         orderDto.setUserId(user.getUserId());
         orderDto.setTimeStamp(variationDto.getTimeStamp());
         orderDto.setQuantity(quantity);
+        orderDto.setOrderType("Buy Order");
         orderService.saveOrder(orderDto);
-        return HttpStatus.OK;
+        return ResponseEntity.status(HttpStatus.OK).body("Order placed successfully");
     }
 }

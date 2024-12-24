@@ -25,6 +25,8 @@ public class Order {
     private String orderStatus;
     @Column(name = "user_id")
     private long userId;
+    @Column(name = "order_type")
+    private String orderType;
     private double price;
     private LocalDateTime timeStamp; // this one is the variation time stamp, not the actual time pair was bought/sold
     private double result;

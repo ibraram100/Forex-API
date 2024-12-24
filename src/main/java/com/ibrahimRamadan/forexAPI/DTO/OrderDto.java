@@ -21,5 +21,6 @@ public class OrderDto {
     private LocalDateTime actualCloseTime;
     private LocalDateTime effectiveCloseTime;
     private int quantity;
+    private String orderType;
 }
 
