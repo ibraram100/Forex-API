@@ -31,10 +31,12 @@ public class BuyController {
     private OrderRepository orderRepository;
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private VariationController variationController;
    
 
 
-    // Front end should send a variation so we can store the order
+    // Front would just send a request and the last sav
     @PostMapping("/buy")
     public HttpStatus marketOrder(Principal principal, @RequestParam int quantity)
     {
@@ -46,8 +48,8 @@ public class BuyController {
         }
         UserEntity user = userEntity.get();
 
-        VariationDto variationDto = variationService.getLastVariation();
-
+//        VariationDto variationDto = variationService.getLastVariation();
+        VariationDto variationDto = variationController.getLastVariation();
         OrderDto orderDto = new OrderDto();
         orderDto.setOrderStatus("open");
         orderDto.setPrice(variationDto.getBuyPrice());

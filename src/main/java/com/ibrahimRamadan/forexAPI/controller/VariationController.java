@@ -23,6 +23,9 @@ import java.util.List;
 import java.util.Random;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
 // ##################### Replace variationRepository with VariationService ########################### VERY IMPORTANT ###############################
 @EnableAsync
 @RestController
@@ -35,6 +38,8 @@ public class VariationController {
     private static final Random RANDOM = new Random();
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private final BlockingQueue<Variation> latestVariationQueue = new LinkedBlockingQueue<>(1);
 
     @Async
     @Scheduled(initialDelay = 1000)
@@ -61,6 +66,12 @@ public class VariationController {
                     varPrice = String.valueOf(variation.getPrice());
                     variationDto = modelMapper.map(variation,variationDto.getClass());
                     template.convertAndSend("/forex/live-prices",variationDto);
+
+                    // Remove the current element if the queue is full and offer the new element
+                    latestVariationQueue.poll();
+                    // Store the latest variation in the queue
+                    latestVariationQueue.offer(variation);
+
 
                     System.out.println("Price: " + variation.getPrice());
                     System.out.println("Time Stamp: " + variation.getTimeStamp());
@@ -92,6 +103,17 @@ public class VariationController {
         BigDecimal bd = BigDecimal.valueOf(value);
         bd = bd.setScale(6, RoundingMode.HALF_UP);
         return bd.doubleValue();
+    }
+
+    public VariationDto getLastVariation()
+    {
+        Variation latestVariation = latestVariationQueue.peek();
+        if (latestVariation != null)
+        {
+            ModelMapper modelMapper = new ModelMapper();
+            return modelMapper.map(latestVariation, VariationDto.class);
+        }
+        return null;
     }
 
 }
