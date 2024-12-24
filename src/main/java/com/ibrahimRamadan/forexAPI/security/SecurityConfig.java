@@ -50,6 +50,8 @@ public class SecurityConfig {
                 .requestMatchers("/forex/**").permitAll()
                 .requestMatchers("/live-prices/**").permitAll()
                 .requestMatchers("/api/buy").permitAll()
+                .requestMatchers("/api/close").permitAll()
+
 
                 .anyRequest().authenticated()
                 .and()
