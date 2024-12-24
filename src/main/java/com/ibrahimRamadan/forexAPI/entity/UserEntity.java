@@ -35,6 +35,10 @@ public class UserEntity {
     )
     private List<Role> roles = new ArrayList<>();
 
+    // Specifying the user's currency, weather it's usd,eur,lyd etc.
+    private String creditCurrency;
+    private double credit;
+
 
 
 }

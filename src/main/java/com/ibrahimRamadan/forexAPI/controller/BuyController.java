@@ -1,12 +1,13 @@
 package com.ibrahimRamadan.forexAPI.controller;
 
 
+import com.ibrahimRamadan.forexAPI.DTO.OrderDto;
 import com.ibrahimRamadan.forexAPI.DTO.VariationDto;
 import com.ibrahimRamadan.forexAPI.entity.Order;
 import com.ibrahimRamadan.forexAPI.entity.UserEntity;
 import com.ibrahimRamadan.forexAPI.repository.OrderRepository;
 import com.ibrahimRamadan.forexAPI.repository.UserRepository;
-import com.ibrahimRamadan.forexAPI.service.BuyOrderService;
+import com.ibrahimRamadan.forexAPI.service.OrderService;
 import com.ibrahimRamadan.forexAPI.service.VariationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,9 @@ public class BuyController {
     private UserRepository userRepository;
     @Autowired
     private OrderRepository orderRepository;
-    private List<Order> orders = new ArrayList<>();
+    @Autowired
+    private OrderService orderService;
+   
 
 
     // Front end should send a variation so we can store the order
@@ -45,23 +48,13 @@ public class BuyController {
 
         VariationDto variationDto = variationService.getLastVariation();
 
-        Order templateOrder = new Order();
-        templateOrder.setOrderStatus("open");
-        templateOrder.setPrice(variationDto.getBuyPrice());
-        templateOrder.setUserId(user.getUserId());
-        templateOrder.setTimeStamp(variationDto.getTimeStamp());
-        for (int i=0;i<quantity;i++)
-        {
-            Order order = new Order();
-            order.setOrderStatus(templateOrder.getOrderStatus());
-            order.setPrice(templateOrder.getPrice());
-            order.setUserId(templateOrder.getUserId());
-            order.setTimeStamp(templateOrder.getTimeStamp());
-
-            orders.add(order);
-        }
-        orderRepository.saveAll(orders);
-
+        OrderDto orderDto = new OrderDto();
+        orderDto.setOrderStatus("open");
+        orderDto.setPrice(variationDto.getBuyPrice());
+        orderDto.setUserId(user.getUserId());
+        orderDto.setTimeStamp(variationDto.getTimeStamp());
+        orderDto.setQuantity(quantity);
+        orderService.saveOrder(orderDto);
         return HttpStatus.OK;
     }
 }

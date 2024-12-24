@@ -51,8 +51,6 @@ public class SecurityConfig {
                 .requestMatchers("/live-prices/**").permitAll()
                 .requestMatchers("/api/buy").permitAll()
 
-
-
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic();

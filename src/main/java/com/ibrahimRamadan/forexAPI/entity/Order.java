@@ -26,5 +26,13 @@ public class Order {
     @Column(name = "user_id")
     private long userId;
     private double price;
-    private LocalDateTime timeStamp;
+    private LocalDateTime timeStamp; // this one is the variation time stamp, not the actual time pair was bought/sold
+    private double result;
+    @Transient // it means that actualCloseTime won't be stored in te db
+    private LocalDateTime actualCloseTime;
+    @Transient
+    private LocalDateTime effectiveCloseTime;
+    @Transient
+    private LocalDateTime realTime;
+    private int quantity;
 }
