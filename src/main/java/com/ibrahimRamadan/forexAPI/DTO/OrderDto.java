@@ -15,6 +15,7 @@ public class OrderDto {
     private String orderStatus;
     private long userId;
     private double price;
+    private double closePrice;
     private LocalDateTime timeStamp;
     private LocalDateTime realTime;
     private double result;

@@ -50,8 +50,9 @@ public class CloseController {
             VariationDto variationDto = variationController.getLastVariation();
             UserDto userDto = userService.getUserByUsername(principal.getName());
             // Calculating how much the trader made/lost from the sale
-            double total = userDto.getCredit() + ( (variationDto.getBuyPrice()-orderDto.getPrice())* orderDto.getQuantity() );
+            double total = userDto.getCredit() + ( (variationDto.getSellPrice()-orderDto.getPrice())* orderDto.getQuantity() );
             orderDto.setOrderStatus("closed");
+            orderDto.setClosePrice(variationDto.getSellPrice());
             userDto.setCredit(total);
             orderService.saveOrder(orderDto);
             userService.saveUser(userDto);

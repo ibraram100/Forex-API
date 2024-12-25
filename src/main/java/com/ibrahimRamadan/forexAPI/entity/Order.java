@@ -27,7 +27,11 @@ public class Order {
     private long userId;
     @Column(name = "order_type")
     private String orderType;
+    // This one represents the open price
     private double price;
+    // This one represents the close price
+    @Column(name = "close_price")
+    private double closePrice;
     private LocalDateTime timeStamp; // this one is the variation time stamp, not the actual time pair was bought/sold
     private double result;
     @Transient // it means that actualCloseTime won't be stored in te db

@@ -15,7 +15,9 @@ import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -44,5 +46,15 @@ public class OrderService {
         }
         Order order = orderOptional.get();
         return modelMapper.map(order, OrderDto.class);
+    }
+
+    // Returning all the open orders made by a trader
+    public List<OrderDto> getOpenOrders(long userId)
+    {
+         List<Order> openOrders = orderRepository.findByOrderStatusAndUserId("open", userId);
+         List<OrderDto> openOrderDtos = openOrders.stream()
+                 .map(order -> modelMapper.map(order, OrderDto.class)).collect(Collectors.toList());
+         return openOrderDtos;
+
     }
 }
