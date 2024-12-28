@@ -52,6 +52,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/buy").permitAll()
                 .requestMatchers("/api/close").permitAll()
                 .requestMatchers("/api/orders/open").permitAll()
+                .requestMatchers("/api/sell").permitAll()
+
 
 
 

@@ -44,15 +44,26 @@ public class CloseController {
         }
 
 
+        // Probably needs a lot of refactoring
         // Dealing with buy trades
-        if (!orderDto.getOrderType().equals("buy"))
+        if (orderDto.getOrderType().equals("Buy Order"))
         {
             VariationDto variationDto = variationController.getLastVariation();
             UserDto userDto = userService.getUserByUsername(principal.getName());
-            // Calculating how much the trader made/lost from the sale
+            // Calculating how much the trader made/lost from the trade
             double total = userDto.getCredit() + ( (variationDto.getSellPrice()-orderDto.getPrice())* orderDto.getQuantity() );
             orderDto.setOrderStatus("closed");
             orderDto.setClosePrice(variationDto.getSellPrice());
+            userDto.setCredit(total);
+            orderService.saveOrder(orderDto);
+            userService.saveUser(userDto);
+        } else if (orderDto.getOrderType().equals("Sell Order")) {
+            VariationDto variationDto = variationController.getLastVariation();
+            UserDto userDto = userService.getUserByUsername(principal.getName());
+            // Calculating how much the trader made/lost from the trade
+            double total = userDto.getCredit() + ( (orderDto.getPrice()-variationDto.getBuyPrice())* orderDto.getQuantity() );
+            orderDto.setOrderStatus("closed");
+            orderDto.setClosePrice(variationDto.getBuyPrice());
             userDto.setCredit(total);
             orderService.saveOrder(orderDto);
             userService.saveUser(userDto);
