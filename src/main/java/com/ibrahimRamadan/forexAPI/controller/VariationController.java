@@ -39,7 +39,9 @@ public class VariationController {
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
-    private final BlockingQueue<Variation> latestVariationQueue = new LinkedBlockingQueue<>(1);
+//    private final BlockingQueue<Variation> latestVariationQueue = new LinkedBlockingQueue<>(1);
+//    @Autowired
+    private BlockingQueue<VariationDto> latestVariationQueue;
 
     @Async
     @Scheduled(initialDelay = 1000)
@@ -70,13 +72,8 @@ public class VariationController {
                     // Remove the current element if the queue is full and offer the new element
                     latestVariationQueue.poll();
                     // Store the latest variation in the queue
-                    latestVariationQueue.offer(variation);
+                    latestVariationQueue.offer(variationDto);
 
-
-                    System.out.println("Price: " + variation.getPrice());
-                    System.out.println("Time Stamp: " + variation.getTimeStamp());
-                    System.out.println("i = "+i);
-                    System.out.println("#################################");
 
                 } catch (InterruptedException e) {
                     e.printStackTrace(); // Print exception stack trace for debugging
@@ -92,7 +89,7 @@ public class VariationController {
 
             // Resting the list
             variations = new ArrayList<>();
-            System.out.println("XXXXXXXXXXXXXXXXXXXXXXX");
+//            System.out.println("XXXXXXXXXXXXXXXXXXXXXXX");
         }
 
     }
@@ -107,7 +104,7 @@ public class VariationController {
 
     public VariationDto getLastVariation()
     {
-        Variation latestVariation = latestVariationQueue.peek();
+        VariationDto latestVariation = latestVariationQueue.peek();
         if (latestVariation != null)
         {
             ModelMapper modelMapper = new ModelMapper();

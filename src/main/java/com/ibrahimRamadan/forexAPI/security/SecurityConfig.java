@@ -53,9 +53,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/close").permitAll()
                 .requestMatchers("/api/orders/open").permitAll()
                 .requestMatchers("/api/sell").permitAll()
-
-
-
+                .requestMatchers("/actuator/**").permitAll()
 
                 .anyRequest().authenticated()
                 .and()

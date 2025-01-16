@@ -1,9 +1,12 @@
 package com.ibrahimRamadan.forexAPI;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
+import java.util.logging.Logger;
 
 // The EnableAsync annotation should allow spring boot to do Asynchronous processing
 // Meaning that multiple functions can run at the same time
@@ -15,6 +18,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @SpringBootApplication
 public class ForexApiApplication {
+
+
 
 	public static void main(String[] args) {
 		SpringApplication.run(ForexApiApplication.class, args);
